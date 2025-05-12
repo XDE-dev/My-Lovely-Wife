@@ -7,7 +7,7 @@
 
 <meta property="og:title" content="A Website dedicated to You">
     <meta property="og:description" content="A special place filled with memories, love, and everything that makes you smile.">
-    <meta property="og:image" content="img29.png">
+    <meta property="og:image" content="<meta property="og:image"content="https://somethingspecial-delta.vercel.app/img29.png">
     <meta property="og:url" content="https://somethingspecial-delta.vercel.app/">
     <meta property="og:type" content="website">
 
@@ -206,14 +206,29 @@
             // When Yes is clicked, redirect to firstpage.html
             // In your existing <script> block, update this part ONLY:
 
-yesButton.addEventListener("click", function() {
+yesButton.addEventListener("click", function () {
     const music = document.getElementById("bg-music");
-    music.play();
 
-    // Optional delay to let music start before redirecting
-    setTimeout(function() {
+    // Attempt to play audio on user gesture
+    const playPromise = music.play();
+
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                // Audio started successfully, wait a second before redirecting
+                setTimeout(function () {
+                    window.location.href = "firstpage.html";
+                }, 1000);
+            })
+            .catch((error) => {
+                console.error("Audio playback failed:", error);
+                // Redirect anyway if playback fails
+                window.location.href = "firstpage.html";
+            });
+    } else {
+        // Fallback redirect in case playPromise is undefined
         window.location.href = "firstpage.html";
-    }, 1000);
+    }
 });
             
             // When No is clicked, animate Yes button kicking No button off screen
